@@ -9,7 +9,12 @@ import logging
 
 class Vectorization(object):
     def __init__(self):
-        self.vectorizer = CountVectorizer(min_df=3)
+        self.vectorizer = CountVectorizer(min_df=100)
+        # min_df=3: token count=33068
+        # min_df=10: token count=16777
+        # min_df=20: token count=11733
+        # min_df=50: token count=7479
+        # min_df=100: token count=5298
 
     def vectorize(self, train_data, test_data):
         train_sents = [' '.join(t['tokens']) for t in train_data]
@@ -18,7 +23,10 @@ class Vectorization(object):
 
         self.vectorizer.fit(train_sents)
         logging.info('Vectorizer ready.')
-        logging.info('token count:' + str(self.vectorizer.get_feature_names()))
+        logging.info(
+            'token count=' + str(len(self.vectorizer.get_feature_names())))
+        # logging.info(
+        #     'tokens=' + str(self.vectorizer.get_feature_names()))
 
         with open('vectorizer.pkl', 'wb') as vectorizer_file:
             pickle.dump(self.vectorizer, vectorizer_file)
