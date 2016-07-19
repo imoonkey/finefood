@@ -78,6 +78,6 @@ if __name__ == '__main__':
         "SVR_L": SVR(kernel='linear'),
         "SVR_R": SVR(kernel='rbf'),
     }
-    for m_name in zoo:
+    for m_name in ['LR', 'RFR', 'SVR_L', 'SVR_R']:
         logging.info('model name: ' + m_name)
         pipeline(predictor_model=zoo[m_name], modelname=m_name + '.pkl')
