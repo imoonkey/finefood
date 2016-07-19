@@ -9,7 +9,7 @@ import logging
 
 class Vectorization(object):
     def __init__(self):
-        self.vectorizer = CountVectorizer(min_df=1)
+        self.vectorizer = CountVectorizer(min_df=3)
 
     def vectorize(self, train_data, test_data):
         train_sents = [' '.join(t['tokens']) for t in train_data]
@@ -18,11 +18,14 @@ class Vectorization(object):
 
         self.vectorizer.fit(train_sents)
         logging.info('Vectorizer ready.')
+        logging.info('token count:' + str(self.vectorizer.get_feature_names()))
+
         with open('vectorizer.pkl', 'wb') as vectorizer_file:
             pickle.dump(self.vectorizer, vectorizer_file)
         train_matrix = self.vectorizer.transform(train_sents)
         test_matrix = self.vectorizer.transform(test_sents)
-        logging.info('Feature matrix got.')
+        logging.info('Feature matrices got.')
+
         return train_matrix, test_matrix
 
     @staticmethod
@@ -37,7 +40,7 @@ class Vectorization(object):
         # loader = np.load(filename)
         # return sparse.csr_matrix(
         # (loader['data'], loader['indices'], loader['indptr']),
-        #     shape=loader['shape'])
+        # shape=loader['shape'])
 
 
 def vectorize_finefood(train_data, test_data):
@@ -52,11 +55,14 @@ def vectorize_finefood(train_data, test_data):
     np.save('test_y', test_y)
     return train_x, train_y, test_x, test_y
 
+
 def load_finefood():
     train_x = Vectorization.load_sparse_csr('train_x.mtx').tocsr()
     train_y = np.load('train_y.npy')
     test_x = Vectorization.load_sparse_csr('test_x.mtx').tocsr()
     test_y = np.load('test_y.npy')
+
+    logging.info('Fine food data loaded.')
     return train_x, train_y, test_x, test_y
 
 
