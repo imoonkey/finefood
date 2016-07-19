@@ -26,7 +26,7 @@ class Vectorization(object):
         logging.info(
             'token count=' + str(len(self.vectorizer.get_feature_names())))
         # logging.info(
-        #     'tokens=' + str(self.vectorizer.get_feature_names()))
+        # 'tokens=' + str(self.vectorizer.get_feature_names()))
 
         with open('vectorizer.pkl', 'wb') as vectorizer_file:
             pickle.dump(self.vectorizer, vectorizer_file)
@@ -58,7 +58,7 @@ def vectorize_finefood(train_data, test_data):
     vec.save_sparse_csr(filename='test_x.mtx', array=test_x)
 
     train_y = np.array([t['helpfulness'] for t in train_data])
-    test_y = np.array([t['helpfulness'] for t in train_data])
+    test_y = np.array([t['helpfulness'] for t in test_data])
     np.save('train_y', train_y)
     np.save('test_y', test_y)
     logging.info('Fine food tokens vectorized.')
@@ -66,13 +66,14 @@ def vectorize_finefood(train_data, test_data):
 
 
 def load_finefood():
-
     train_x = Vectorization.load_sparse_csr('train_x.mtx').tocsr()
     train_y = np.load('train_y.npy')
     test_x = Vectorization.load_sparse_csr('test_x.mtx').tocsr()
     test_y = np.load('test_y.npy')
 
     logging.info('Fine food data loaded.')
+    logging.info('shapes=' + str(train_x.shape) + str(train_y.shape)
+                 + str(test_x.shape) + str(test_y.shape))
     return train_x, train_y, test_x, test_y
 
 
