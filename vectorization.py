@@ -53,10 +53,12 @@ def vectorize_finefood(train_data, test_data):
     test_y = np.array([t['helpfulness'] for t in train_data])
     np.save('train_y', train_y)
     np.save('test_y', test_y)
+    logging.info('Fine food tokens vectorized.')
     return train_x, train_y, test_x, test_y
 
 
 def load_finefood():
+
     train_x = Vectorization.load_sparse_csr('train_x.mtx').tocsr()
     train_y = np.load('train_y.npy')
     test_x = Vectorization.load_sparse_csr('test_x.mtx').tocsr()
@@ -67,5 +69,10 @@ def load_finefood():
 
 
 if __name__ == '__main__':
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s',
+        filename='predict.log'
+    )
     vectorize_finefood(train_data=pickle.load(open('train.pkl', 'rb')),
                        test_data=pickle.load(open('test.pkl', 'rb')))
